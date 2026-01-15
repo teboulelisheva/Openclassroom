@@ -134,3 +134,59 @@ Les données entrantes sont validées avec Pydantic afin de garantir la conformi
 
 ### Documentation
 La documentation interactive est accessible via /docs.
+
+## Base de données et traçabilité
+
+Une base de données PostgreSQL locale est utilisée comme point central entre l’API
+et le modèle de machine learning. Toutes les entrées et sorties du modèle sont
+enregistrées afin de garantir une traçabilité complète.
+
+### Schéma UML de la base de données
+markdown
+```markdown
++------------------+
+|    buildings     |
++------------------+
+| id (PK)          |
+| building_id      |
+| primary_property |
+| gross_floor_area |
+| year_built       |
+| site_energy_use  |
++------------------+
+
++------------------+
+|    ml_inputs     |
++------------------+
+| id (PK)          |
+| timestamp        |
+| feature1         |
+| feature2         |
++------------------+
+
++---------------------+
+|   ml_predictions    |
++---------------------+
+| id (PK)             |
+| input_id (FK)       |
+| prediction          |
+| timestamp           |
++---------------------+
+
+ml_inputs.id ───────▶ ml_predictions.input_id
+
+
+## API et traçabilité des prédictions
+
+Une API FastAPI a été développée afin d’exposer le modèle de machine learning.
+Toutes les requêtes envoyées au modèle passent obligatoirement par une base
+de données PostgreSQL.
+
+Chaque appel à l’endpoint `/predict` :
+- enregistre les données d’entrée dans la table `ml_inputs`
+- génère une prédiction via le modèle
+- enregistre la sortie dans la table `ml_predictions`
+
+Cette architecture garantit une traçabilité complète des échanges entre l’API,
+la base de données et le modèle.
+ (uvicorn pr lancer fast api)
