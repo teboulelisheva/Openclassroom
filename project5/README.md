@@ -99,3 +99,12 @@ Ils ne sont jamais présents en clair dans le code source.
 - Les tests n’incluent pas l’entraînement complet pour limiter
   le temps d’exécution
 - Le pipeline peut être étendu avec des métriques avancées
+
+
+Ton modèle ML
+     ↓
+Fonction Python (predict)
+     ↓
+Gradio (UI web)
+     ↓
+Hugging Face Space (serveur + URL)
