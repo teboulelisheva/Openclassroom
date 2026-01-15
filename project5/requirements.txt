@@ -4,3 +4,5 @@ matplotlib
 seaborn
 scikit-learn
 gradio
+fastapi
+uvicorn

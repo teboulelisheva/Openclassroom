@@ -115,3 +115,22 @@ Le modèle est automatiquement déployé sur Hugging Face Spaces via GitHub Acti
 Chaque fusion sur la branche `main` déclenche un déploiement en production.
 
 URL du Space : https://huggingface.co/spaces/TON_COMPTE/project5-ml-ci-cd
+
+
+Le code est versionné et testé via GitHub Actions, tandis que l’application est déployée et exécutée sur Hugging Face Spaces. Le déploiement est actuellement manuel afin de garder un contrôle explicite sur la version en productio
+
+
+
+## API de prédiction
+
+Une API REST a été développée avec FastAPI pour exposer le modèle de machine learning.
+
+### Endpoints
+- GET /health : vérifie l’état de l’API
+- POST /predict : retourne une prédiction du modèle
+
+### Validation
+Les données entrantes sont validées avec Pydantic afin de garantir la conformité des entrées.
+
+### Documentation
+La documentation interactive est accessible via /docs.
