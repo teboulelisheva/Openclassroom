@@ -2,5 +2,5 @@ numpy
 pandas
 matplotlib
 seaborn
-pip
+scikit-learn
 gradio
