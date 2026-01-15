@@ -29,3 +29,24 @@ jobs:
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)
           python -m pytest
+deploy:
+  needs: test
+  runs-on: ubuntu-latest
+  if: github.ref == 'refs/heads/main'
+
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Push to Hugging Face Space
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        git clone https://huggingface.co/spaces/teboul/project5-ml-ci-cd hf_space
+        cp -r project5/* hf_space/
+        cd hf_space
+        git config user.email "ci@github.com"
+        git config user.name "GitHub Actions"
+        git add .
+        git commit -m "Deploy from GitHub Actions"
+        git push https://TOKEN:${HF_TOKEN}@huggingface.co/spaces/teboul/project5-ml-ci-cd main

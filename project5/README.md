@@ -108,3 +108,10 @@ Fonction Python (predict)
 Gradio (UI web)
      ↓
 Hugging Face Space (serveur + URL)
+
+## Déploiement
+
+Le modèle est automatiquement déployé sur Hugging Face Spaces via GitHub Actions.
+Chaque fusion sur la branche `main` déclenche un déploiement en production.
+
+URL du Space : https://huggingface.co/spaces/TON_COMPTE/project5-ml-ci-cd
