@@ -1,4 +1,5 @@
-from src.train import train_dummy_model
+from project5.src.train import train_dummy_model
+
 
 
 def test_model_training():
