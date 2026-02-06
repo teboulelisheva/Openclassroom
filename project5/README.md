@@ -190,3 +190,47 @@ Chaque appel à l’endpoint `/predict` :
 Cette architecture garantit une traçabilité complète des échanges entre l’API,
 la base de données et le modèle.
  (uvicorn pr lancer fast api)
+
+## Tests, fiabilité et couverture
+
+Afin de garantir la fiabilité et la robustesse du modèle de machine learning,
+une suite complète de tests unitaires et fonctionnels a été développée avec Pytest.
+
+### Tests unitaires
+
+Les tests unitaires permettent de valider les composants critiques de manière
+isolée, notamment :
+- l’entraînement et le comportement du modèle de machine learning,
+- la cohérence des prédictions produites,
+- la validation des données entrantes via Pydantic,
+- la gestion des cas d’erreur et des entrées invalides.
+
+Les tests prennent en compte les types numériques retournés par les bibliothèques
+de machine learning (NumPy, scikit-learn) afin de garantir une compatibilité et une
+reproductibilité des résultats.
+
+### Tests fonctionnels
+
+Les tests fonctionnels évaluent le fonctionnement global du système en conditions
+réelles. Ils valident notamment :
+- le bon fonctionnement de l’API FastAPI,
+- la génération des prédictions via le modèle,
+- l’enregistrement systématique des entrées et des sorties dans la base de données
+  PostgreSQL,
+- la traçabilité complète des échanges entre l’API, le modèle et la base de données.
+
+Ces tests permettent de vérifier l’intégration complète de la chaîne applicative.
+
+### Couverture de tests
+
+La couverture de tests est mesurée à l’aide de pytest-cov afin d’évaluer le niveau
+de validation du code applicatif.
+
+Un rapport de couverture est généré au format HTML, permettant d’identifier
+facilement les parties du code testées et celles nécessitant une attention
+particulière.
+
+Cette approche garantit la fiabilité du code et facilite l’identification et la
+correction des points faibles.
+
+

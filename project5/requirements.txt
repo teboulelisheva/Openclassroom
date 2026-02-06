@@ -8,3 +8,5 @@ fastapi
 uvicorn
 sqlalchemy
 psycopg2-binary
+pytest-cov
+python-dotenv
