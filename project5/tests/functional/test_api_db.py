@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 from project5.api_db import app
-
+import pytest
+pytestmark = pytest.mark.integration
 client = TestClient(app)
 
 def test_health_endpoint():
