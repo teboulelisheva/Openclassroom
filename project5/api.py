@@ -37,7 +37,9 @@ def health_check():
 
 @app.post("/predict", response_model=PredictionOutput)
 def predict(data: PredictionInput):
-    df = pd.DataFrame([[data.feature1, data.feature2]],
-                      columns=["feature1", "feature2"])
-    pred = model.predict(df)[0]
+
+    X = [[data.feature1, data.feature2]]
+
+    pred = model.predict(X)[0]
+
     return {"prediction": int(pred)}

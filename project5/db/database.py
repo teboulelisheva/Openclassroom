@@ -2,7 +2,9 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
-load_dotenv()
+from pathlib import Path
+env_path = Path(__file__).resolve().parents[1] / ".env"
+load_dotenv(env_path)
 
 
 DB_USER = os.getenv("DB_USER", "openpg")
