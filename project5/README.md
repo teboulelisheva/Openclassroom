@@ -1,236 +1,253 @@
-Des relevés minutieux ont été effectués par les agents de la ville en 2016. Voici les données et leur source. Ces relevés sont coûteux à obtenir, et à partir de ceux déjà réalisés, vous voulez tenter de prédire les émissions de CO2 et la consommation totale d’énergie de bâtiments non destinés à l’habitation pour lesquels elles n’ont pas encore été mesurées.
 
- 
+# Prédiction de la consommation énergétique des bâtiments de Seattle
 
-Votre prédiction se basera sur les données structurelles des bâtiments (taille et usage des bâtiments, date de construction, situation géographique, ...).
+## Contexte du projet
 
- 
+Des relevés minutieux ont été effectués par les agents de la ville de Seattle en 2016 afin de mesurer la consommation énergétique et les émissions de CO₂ des bâtiments non résidentiels.
 
-Le Project Lead Douglas vous convie par message à une réunion de kick-off :
+Ces relevés étant coûteux à obtenir, la ville souhaite désormais prédire ces informations pour les bâtiments qui n'ont pas encore été mesurés.
 
- 
+L'objectif est donc de développer un modèle de machine learning capable de prédire :
 
-Comme tu le sais, ce genre de projet est mené en général par ta collègue Data Scientist Léa. Sauf qu’elle va partir en congé maternité à partir de la semaine prochaine. Ce projet a une très haute visibilité en ce moment auprès de la mairie de Seattle et nous ne pouvons pas attendre son retour pour commencer à travailler dessus. 
+- la consommation totale d'énergie
+- les émissions de CO₂
 
- 
+à partir de caractéristiques structurelles des bâtiments telles que :
 
-Afin de t’aider, je me suis coordonné avec Léa pour qu’elle te facilite le travail en te préparant un notebook avec un template de la démarche à suivre et des conseils pour éviter certains pièges. Dans l’ensemble, j’attends de toi :
+- la surface
+- l'année de construction
+- le type d'utilisation
+- la localisation
+- les caractéristiques techniques du bâtiment
 
-une courte analyse exploratoire pour faire ressortir des insights clés sur les différents bâtiments ;
-des tests des différents modèles supervisés visant à prédire la consommation en énergie des bâtiments ;
-la détermination des facteurs principaux impactant le plus le modèle que tu auras sélectionné.
-
-# Projet 5 – Mise en place d’un pipeline CI/CD pour un modèle de ML
-
-## 1. Contexte du projet
-Ce projet a pour objectif de mettre en place une infrastructure
-d’intégration continue (CI) et de déploiement continu (CD) pour un
-projet de machine learning.
+Ces prédictions permettront à la ville de mieux piloter sa politique énergétique et environnementale.
 
 ---
 
-## 2. Environnements
+# Objectifs du projet
 
-### Développement (dev)
-- Environnement local (PyCharm)
-- Utilisé pour l’exploration et l’entraînement
-- Notebook Jupyter
+## 1. Analyse exploratoire des données
 
-### Test (ci)
-- Environnement GitHub Actions
-- Lancement automatique des tests à chaque push ou pull request
-- Validation du code avant fusion
+Réaliser une analyse exploratoire (EDA) afin de :
 
-### Production (prod)
-- Déploiement sur Hugging Face Spaces
-- Modèle prêt à être utilisé via une interface ou une API
+- comprendre la structure du dataset
+- identifier les variables importantes
+- détecter les valeurs aberrantes
+- analyser les corrélations
 
 ---
 
-## 3. Pipeline CI/CD
+## 2. Modélisation
 
-Le pipeline CI/CD suit les étapes suivantes :
+Tester plusieurs modèles supervisés afin de prédire la consommation énergétique.
 
-1. Push ou Pull Request sur le dépôt GitHub
-2. Lancement automatique du pipeline CI via GitHub Actions
+Modèles testés :
+
+- Random Forest
+- Régression linéaire
+- Support Vector Regression
+
+L'objectif est de sélectionner le modèle le plus performant.
+
+---
+
+## 3. Interprétabilité
+
+Identifier les facteurs ayant le plus d'impact sur la prédiction, notamment :
+
+- la surface du bâtiment
+- le type d'utilisation
+- l'année de construction
+- l'intensité énergétique
+
+---
+
+# Architecture du projet
+
+Dataset
+↓
+Notebook d’analyse
+↓
+Entraînement du modèle ML
+↓
+Fonction Python predict()
+↓
+API FastAPI
+↓
+Interface Gradio
+↓
+Déploiement Hugging Face Spaces
+
+---
+
+# Environnements du projet
+
+## Développement (DEV)
+
+Environnement local utilisé pour :
+
+- l'analyse exploratoire
+- l'entraînement des modèles
+- l'expérimentation
+
+Outils :
+
+- Python
+- Jupyter Notebook
+- PyCharm
+- Pandas
+- Scikit-learn
+
+---
+
+## Intégration Continue (CI)
+
+Un pipeline CI est configuré avec GitHub Actions.
+
+À chaque push ou pull request :
+
+1. installation des dépendances
+2. exécution des tests
+3. validation du code
+
+---
+
+## Production (PROD)
+
+Le modèle est déployé sur Hugging Face Spaces afin de permettre l'utilisation du modèle via une interface web.
+
+---
+
+# Pipeline CI/CD
+
+Le pipeline automatisé suit les étapes suivantes :
+
+1. Push sur GitHub
+2. Déclenchement du pipeline GitHub Actions
 3. Installation des dépendances
-4. Exécution des tests automatiques
+4. Lancement des tests automatiques
 5. Validation du code
-6. (Optionnel) Déploiement du modèle en production
+6. Déploiement du modèle
 
 ---
 
-## 4. Tests automatisés
+# API de prédiction
 
-Les tests automatisés permettent de vérifier :
-- Le chargement des données
-- L’entraînement du modèle sur un échantillon réduit
-- La capacité du modèle à produire des prédictions
+Une API REST a été développée avec FastAPI.
 
-Les tests sont exécutés automatiquement à chaque push et pull request.
+## Endpoints
 
----
+GET /health  
+Vérifie que l'API fonctionne.
 
-## 5. Gestion des branches et validation
+POST /predict  
+Retourne une prédiction du modèle.
 
-- La branche `main` est protégée
-- Toute modification doit passer par une Pull Request
-- La fusion est conditionnée au succès du pipeline CI
+Les données sont validées avec Pydantic.
 
 ---
 
-## 6. Gestion des secrets
+# Base de données et traçabilité
 
-Les secrets (tokens, clés API) sont stockés dans les GitHub Secrets.
-Ils ne sont jamais présents en clair dans le code source.
+Une base PostgreSQL est utilisée afin d'enregistrer :
+
+- les entrées envoyées au modèle
+- les prédictions produites
+
+Cela permet de garantir une traçabilité complète.
+
+Schéma simplifié :
+
+buildings
+- id
+- building_id
+- primary_property
+- gross_floor_area
+- year_built
+- site_energy_use
+
+ml_inputs
+- id
+- timestamp
+- feature1
+- feature2
+
+ml_predictions
+- id
+- input_id
+- prediction
+- timestamp
+
+Relation :
+ml_inputs.id → ml_predictions.input_id
 
 ---
 
-## 7. Outils utilisés
+# Interface utilisateur
 
-- GitHub Actions pour la CI/CD
-- Hugging Face Spaces pour le déploiement
-- Python, scikit-learn, pandas
+Une interface web a été développée avec Gradio permettant :
+
+- d'entrer les caractéristiques d’un bâtiment
+- d'obtenir une prédiction instantanément
 
 ---
 
-## 8. Limites et améliorations possibles
+# Déploiement
 
-- Les tests n’incluent pas l’entraînement complet pour limiter
-  le temps d’exécution
-- Le pipeline peut être étendu avec des métriques avancées
+Le projet est déployé sur Hugging Face Spaces.
 
+Architecture :
 
-Ton modèle ML
-     ↓
-Fonction Python (predict)
-     ↓
-Gradio (UI web)
-     ↓
-Hugging Face Space (serveur + URL)
+Modèle ML  
+↓  
+Fonction predict()  
+↓  
+Gradio  
+↓  
+Hugging Face Space
 
-## Déploiement
+---
 
-Le modèle est automatiquement déployé sur Hugging Face Spaces via GitHub Actions.
-Chaque fusion sur la branche `main` déclenche un déploiement en production.
+# Tests et fiabilité
 
-URL du Space : https://huggingface.co/spaces/TON_COMPTE/project5-ml-ci-cd
+Une suite de tests a été développée avec Pytest.
 
+## Tests unitaires
 
-Le code est versionné et testé via GitHub Actions, tandis que l’application est déployée et exécutée sur Hugging Face Spaces. Le déploiement est actuellement manuel afin de garder un contrôle explicite sur la version en productio
+- chargement des données
+- entraînement du modèle
+- cohérence des prédictions
+- validation des données
 
+## Tests fonctionnels
 
+- fonctionnement de l’API FastAPI
+- intégration avec PostgreSQL
+- enregistrement des prédictions
 
-## API de prédiction
+## Couverture de tests
 
-Une API REST a été développée avec FastAPI pour exposer le modèle de machine learning.
+La couverture est mesurée avec pytest-cov et un rapport HTML est généré.
 
-### Endpoints
-- GET /health : vérifie l’état de l’API
-- POST /predict : retourne une prédiction du modèle
+---
 
-### Validation
-Les données entrantes sont validées avec Pydantic afin de garantir la conformité des entrées.
+# Technologies utilisées
 
-### Documentation
-La documentation interactive est accessible via /docs.
+- Python
+- Pandas
+- Scikit-learn
+- FastAPI
+- PostgreSQL
+- Pytest
+- GitHub Actions
+- Gradio
+- Hugging Face Spaces
 
-## Base de données et traçabilité
+---
 
-Une base de données PostgreSQL locale est utilisée comme point central entre l’API
-et le modèle de machine learning. Toutes les entrées et sorties du modèle sont
-enregistrées afin de garantir une traçabilité complète.
+# Améliorations possibles
 
-### Schéma UML de la base de données
-markdown
-```markdown
-+------------------+
-|    buildings     |
-+------------------+
-| id (PK)          |
-| building_id      |
-| primary_property |
-| gross_floor_area |
-| year_built       |
-| site_energy_use  |
-+------------------+
-
-+------------------+
-|    ml_inputs     |
-+------------------+
-| id (PK)          |
-| timestamp        |
-| feature1         |
-| feature2         |
-+------------------+
-
-+---------------------+
-|   ml_predictions    |
-+---------------------+
-| id (PK)             |
-| input_id (FK)       |
-| prediction          |
-| timestamp           |
-+---------------------+
-
-ml_inputs.id ───────▶ ml_predictions.input_id
-
-
-## API et traçabilité des prédictions
-
-Une API FastAPI a été développée afin d’exposer le modèle de machine learning.
-Toutes les requêtes envoyées au modèle passent obligatoirement par une base
-de données PostgreSQL.
-
-Chaque appel à l’endpoint `/predict` :
-- enregistre les données d’entrée dans la table `ml_inputs`
-- génère une prédiction via le modèle
-- enregistre la sortie dans la table `ml_predictions`
-
-Cette architecture garantit une traçabilité complète des échanges entre l’API,
-la base de données et le modèle.
- (uvicorn pr lancer fast api)
-
-## Tests, fiabilité et couverture
-
-Afin de garantir la fiabilité et la robustesse du modèle de machine learning,
-une suite complète de tests unitaires et fonctionnels a été développée avec Pytest.
-
-### Tests unitaires
-
-Les tests unitaires permettent de valider les composants critiques de manière
-isolée, notamment :
-- l’entraînement et le comportement du modèle de machine learning,
-- la cohérence des prédictions produites,
-- la validation des données entrantes via Pydantic,
-- la gestion des cas d’erreur et des entrées invalides.
-
-Les tests prennent en compte les types numériques retournés par les bibliothèques
-de machine learning (NumPy, scikit-learn) afin de garantir une compatibilité et une
-reproductibilité des résultats.
-
-### Tests fonctionnels
-
-Les tests fonctionnels évaluent le fonctionnement global du système en conditions
-réelles. Ils valident notamment :
-- le bon fonctionnement de l’API FastAPI,
-- la génération des prédictions via le modèle,
-- l’enregistrement systématique des entrées et des sorties dans la base de données
-  PostgreSQL,
-- la traçabilité complète des échanges entre l’API, le modèle et la base de données.
-
-Ces tests permettent de vérifier l’intégration complète de la chaîne applicative.
-
-### Couverture de tests
-
-La couverture de tests est mesurée à l’aide de pytest-cov afin d’évaluer le niveau
-de validation du code applicatif.
-
-Un rapport de couverture est généré au format HTML, permettant d’identifier
-facilement les parties du code testées et celles nécessitant une attention
-particulière.
-
-Cette approche garantit la fiabilité du code et facilite l’identification et la
-correction des points faibles.
-
-
+- ajout de métriques supplémentaires
+- monitoring du modèle
+- automatisation complète du déploiement
+- amélioration de l'interface utilisateur
