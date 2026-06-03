@@ -1,0 +1,14 @@
+.env
+__pycache__/
+*.py[cod]
+venv/
+env/
+.venv/
+vectorstore/faiss_index/
+data/raw/
+*.pkl
+*.index
+.DS_Store
+.idea/
+.vscode/
+*.log
