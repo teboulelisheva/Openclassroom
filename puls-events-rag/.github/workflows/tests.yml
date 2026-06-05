@@ -1,0 +1,50 @@
+name: Tests RAG Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 8 * * 1'  # Chaque lundi à 8h
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build FAISS index
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+        run: python scripts/build_index.py
+
+      - name: Run tests unitaires (collect + clean + vectorize)
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          VECTORSTORE_PATH: ./vectorstore/faiss_index
+        run: pytest tests/test_collect.py tests/test_clean.py tests/test_vectorize.py tests/test_api.py -v --tb=short
+
+      - name: Run tests evaluation RAG
+        env:
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          VECTORSTORE_PATH: ./vectorstore/faiss_index
+        run: pytest tests/test_evaluate.py -v --tb=short
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: logs/
