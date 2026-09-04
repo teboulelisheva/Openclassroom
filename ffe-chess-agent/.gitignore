@@ -1,0 +1,27 @@
+# Environnement / secrets
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Node / Angular (frontend)
+node_modules/
+dist/
+.angular/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Données locales
+*.log
+data/
