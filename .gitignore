@@ -1,0 +1,18 @@
+# Environnement
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Secrets
+.env
+
+# Pytest / coverage
+.htmlcov/
+htmlcov/
+.coverage
+.coverage.*
+
+# IDE
+.idea/
+.vscode/

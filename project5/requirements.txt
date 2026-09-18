@@ -3,3 +3,10 @@ pandas
 matplotlib
 seaborn
 scikit-learn
+gradio
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+pytest-cov
+python-dotenv

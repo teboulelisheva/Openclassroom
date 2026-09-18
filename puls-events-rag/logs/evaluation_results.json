@@ -1,0 +1,30 @@
+{
+  "date": "2026-06-05T10:04:03.489264",
+  "nb_tests": 7,
+  "resultats": [
+    {
+      "id": "T01",
+      "question": "Quels concerts sont disponibles à Paris ?",
+      "score_mots_cles": 1.0,
+      "score_faiss": 0.4527,
+      "statut": "OK",
+      "reponse_extrait": "D'après les événements fournis, voici les concerts disponibles à Paris :\n\n1. **Les Bébé Concerts par l'Orchestre Lamoureux**\n   - **Lieu** : Salle Gav"
+    },
+    {
+      "id": "T02",
+      "question": "Y a-t-il des expositions d'art à Paris ?",
+      "score_mots_cles": 0.667,
+      "score_faiss": 0.3836,
+      "statut": "OK",
+      "reponse_extrait": "Oui, il y a plusieurs expositions d'art à Paris mentionnées dans les événements fournis :\n\n1. **\"Toutes les expositions gratuites de la Ville\"** (Pari"
+    },
+    {
+      "id": "T03",
+      "question": "Je cherche un événement pour enfants à Paris",
+      "score_mots_cles": 0.5,
+      "score_faiss": 0.3917,
+      "statut": "OK",
+      "reponse_extrait": "Aujourd'hui, le **05/06/2026**, voici les événements pour enfants à Paris disponibles selon les informations fournies :\n\n1. **Les Samedis en Famille**"
+    }
+  ]
+}
