@@ -1,0 +1,97 @@
+<div class="app">
+  <header class="header">
+    <h1>♟️ Coach d'ouvertures — FFE</h1>
+    <p class="subtitle">Joue un coup : l'agent te propose la théorie, le contexte et des vidéos.</p>
+  </header>
+
+  <main class="layout">
+    <!-- Colonne échiquier -->
+    <section class="board-panel">
+      <ngx-chess-board
+        #board
+        [size]="480"
+        [showCoords]="true"
+        [darkTileColor]="'#769656'"
+        [lightTileColor]="'#eeeed2'"
+        (moveChange)="onMove()">
+      </ngx-chess-board>
+
+      <div class="board-actions">
+        <button class="btn" (click)="reset()">↺ Réinitialiser</button>
+      </div>
+    </section>
+
+    <!-- Colonne recommandations -->
+    <section class="reco-panel">
+      <div *ngIf="loading" class="state loading">L'agent analyse la position…</div>
+      <div *ngIf="error" class="state error">{{ error }}</div>
+
+      <ng-container *ngIf="recommendations && !loading">
+        <!-- En-tête position -->
+        <div class="card">
+          <h2>
+            {{ recommendations.opening || 'Position sans nom d’ouverture' }}
+          </h2>
+          <span class="badge" [class.badge-theory]="recommendations.is_theoretical"
+                              [class.badge-offbook]="!recommendations.is_theoretical">
+            {{ recommendations.is_theoretical ? 'Position théorique' : 'Hors théorie' }}
+          </span>
+        </div>
+
+        <!-- Coups théoriques -->
+        <div class="card" *ngIf="recommendations.moves?.length">
+          <h3>Coups théoriques</h3>
+          <div class="moves">
+            <span class="move" *ngFor="let m of recommendations.moves">{{ m.san }}</span>
+          </div>
+        </div>
+
+        <!-- Évaluation Stockfish -->
+        <div class="card" *ngIf="recommendations.evaluation as ev">
+          <h3>Évaluation du moteur</h3>
+          <p class="eval">{{ ev.interpretation }}</p>
+          <p class="eval-detail" *ngIf="ev.best_move">Meilleur coup : <strong>{{ ev.best_move }}</strong></p>
+        </div>
+
+        <!-- Contexte (RAG) -->
+        <div class="card" *ngIf="recommendations.context?.length">
+          <h3>Le savais-tu ?</h3>
+          <div class="context" *ngFor="let c of recommendations.context">
+            <p class="context-text">{{ c.text }}</p>
+            <p class="context-src">{{ c.opening }} <span *ngIf="c.eco">· {{ c.eco }}</span></p>
+          </div>
+        </div>
+
+        <!-- Vidéos -->
+        <div class="card" *ngIf="recommendations.videos?.length">
+          <h3>Vidéos explicatives</h3>
+          <div class="videos">
+            <div class="video" *ngFor="let v of recommendations.videos">
+              <iframe
+                [src]="safeEmbed(v.embed_url)"
+                title="{{ v.title }}"
+                frameborder="0"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+              </iframe>
+              <a class="video-title" [href]="v.url" target="_blank" rel="noopener">{{ v.title }}</a>
+              <span class="video-channel">{{ v.channel }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Outils indisponibles -->
+        <div class="card warn" *ngIf="hasErrors()">
+          <h3>⚠️ Ressources partielles</h3>
+          <ul>
+            <li *ngFor="let e of recommendations.errors">{{ e }}</li>
+          </ul>
+        </div>
+      </ng-container>
+
+      <div *ngIf="!recommendations && !loading && !error" class="state">
+        Joue un coup pour lancer l'analyse.
+      </div>
+    </section>
+  </main>
+</div>

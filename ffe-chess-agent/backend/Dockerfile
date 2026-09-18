@@ -7,14 +7,26 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# On installe les dépendances d'abord pour profiter du cache Docker
+# Binaire Stockfish (moteur d'analyse) — installé à /usr/games/stockfish
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends stockfish \
+    && rm -rf /var/lib/apt/lists/*
+
+# On installe les dépendances Python ensuite pour profiter du cache Docker
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# torch en version CPU d'abord : évite ~5 Go de paquets CUDA/nvidia inutiles
+# sans GPU (image beaucoup plus légère et build plus rapide).
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu \
+    && pip install --no-cache-dir -r requirements.txt
 
 # Puis le code applicatif
 COPY ./app ./app
+COPY ./scripts ./scripts
+COPY ./data ./data
+COPY entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 EXPOSE 8000
 
-# --reload est pratique en dev ; à retirer en production
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Construit l'index Milvus si absent, puis lance l'API (voir entrypoint.sh).
+CMD ["./entrypoint.sh"]
